@@ -1,5 +1,6 @@
-import random
+import PySimpleGUI as sg
 import math
+import random
 import time
 
 poblacion_inicial = []
@@ -14,10 +15,10 @@ r1 = []
 r2 = []
 iteraciones = 100 #En 100 iteraciones hay convergencia
 iteracion = 0
-vin = float(input('Inserte el valor del voltaje de entrada -> '))
-vout = float(input('Inserte el valor del voltaje deseado en el divisor -> '))
+vin = 0
+vout = 0
 N = 30 #Alternar entre 10 y 30
-L = 28 #48, 40 y 28 bits funcionan 
+L = 28 #48, 40 y 28 bits funcionan
 
 def generador_de_individuos():
     temprow = []
@@ -140,7 +141,7 @@ def mutacion():
         elif individuo_al == 1:
             poblacion_hijos[rand_fila][rand_col] = 0
 
-def main():
+def algotithm():
     global iteracion, iteraciones
     start = time.time()
     generador_de_individuos()
@@ -175,5 +176,31 @@ def main():
             elif inversion[ind] == 1:
                 print(F'R1 = {rnum_2[ind]}    R2 = {rnum_1[ind]} {aptitud_lst[ind]}% de éxito')
 
-if __name__ == "__main__":
+def main():
+    global vin, vout
+
+    sg.theme('DarkBlue4')
+
+    layout = [
+        [sg.Text('VolDivAI')],
+        [sg.Text('Voltaje de entrada:'), sg.InputText(key='__VIN__')],
+        [sg.Text('Voltaje de salida:'), sg.InputText(key='__VOUT__')],
+        [sg.Button('Calcular')],
+        [sg.Button('Salir')]
+    ]
+
+    window = sg.Window('VolDivAI', layout)
+
+    while True:
+        event, values = window.read()
+        if event == sg.WIN_CLOSED or event == 'Salir':
+            break
+        elif event == 'Calcular':
+            vin =int(values['__VIN__'])
+            vout = int(values['__VOUT__'])
+            algotithm()
+
+    window.close()
+
+if __name__ == '__main__':
     main()
