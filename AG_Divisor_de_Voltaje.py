@@ -141,7 +141,7 @@ def mutacion():
             poblacion_hijos[rand_fila][rand_col] = 0
 
 def main():
-    global iteracion, iteraciones
+    global iteracion, iteraciones, poblacion_inicial
     start = time.time()
     generador_de_individuos()
     evaluacion_de_aptitud()

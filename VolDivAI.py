@@ -21,6 +21,7 @@ vin = 0
 vout = 0
 N = 30 #Alternar entre 10 y 30
 L = 28 #48, 40 y 28 bits funcionan
+epocas = 100
 
 r1_final = 0
 r2_final = 0
@@ -148,45 +149,44 @@ def mutacion():
             poblacion_hijos[rand_fila][rand_col] = 0
 
 def algotithm():
-    global iteracion, iteraciones, r1_final, r2_final, aptitud_final
+    global iteracion, iteraciones, poblacion_inicial, r1_final, r2_final, aptitud_final, epocas
+
+    apt_flag = False
+
     start = time.time()
-    generador_de_individuos()
-    evaluacion_de_aptitud()
-
-    # print('--Primera Generacion--')
-    # for ind in range(0,N):
-    #     print(F'Individuo {ind}: {poblacion_inicial[ind]}   Aptitud: {aptitud_lst[ind]}')
-    #     print(F'Resultado {ind}: R1 = {rnum_1[ind]}    R2 = {rnum_2[ind]}')
-
-    ruleta_y_seleccion()
-    cruce_aleatorio()
-    mutacion()
-
-    for iteraciones in range(0,iteraciones):
-        poblacion_inicial = poblacion_hijos
+    for epoca in range(epocas):
+        generador_de_individuos()
         evaluacion_de_aptitud()
         ruleta_y_seleccion()
         cruce_aleatorio()
         mutacion()
-        iteracion += 1
 
+        for iteraciones in range(0,iteraciones):
+            poblacion_inicial = poblacion_hijos
+            evaluacion_de_aptitud()
+            ruleta_y_seleccion()
+            cruce_aleatorio()
+            mutacion()
+            iteracion += 1
+
+        print('--Posibles valores de resistencias--')
+        for ind in range(0,N):
+            if aptitud_lst[ind] > 98:
+                if inversion[ind] == 0:
+                    print(F'R1 = {rnum_1[ind]}    R2 = {rnum_2[ind]}    {aptitud_lst[ind]}% de éxito')
+                    r1_final = rnum_1[ind]
+                    r2_final = rnum_2[ind]
+                    aptitud_final = aptitud_lst[ind]
+                elif inversion[ind] == 1:
+                    print(F'R1 = {rnum_2[ind]}    R2 = {rnum_1[ind]} {aptitud_lst[ind]}% de éxito')
+                    r1_final = rnum_2[ind]
+                    r2_final = rnum_1[ind]
+                    aptitud_final = aptitud_lst[ind]
+                apt_flag = True
+        if apt_flag:
+            break
     end = time.time()
-
-    print(F'{iteracion} iteraciones en {end-start} segundos')
-
-    print('--Posibles valores de resistencias--')
-    for ind in range(0,N):
-        if aptitud_lst[ind] > 98:
-            if inversion[ind] == 0:
-                print(F'R1 = {rnum_1[ind]}    R2 = {rnum_2[ind]}    {aptitud_lst[ind]}% de éxito')
-                r1_final = rnum_1[ind]
-                r2_final = rnum_2[ind]
-                aptitud_final = aptitud_lst[ind]
-            elif inversion[ind] == 1:
-                print(F'R1 = {rnum_2[ind]}    R2 = {rnum_1[ind]} {aptitud_lst[ind]}% de éxito')
-                r1_final = rnum_2[ind]
-                r2_final = rnum_1[ind]
-                aptitud_final = aptitud_lst[ind]
+    print(F'{end-start} segundos')
 
 def build_gui():
     global vin, vout, r1_final, r2_final, aptitud_final
@@ -252,7 +252,6 @@ def build_gui():
 
 def main():
     build_gui()
-
 
 if __name__ == '__main__':
     main()
