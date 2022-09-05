@@ -22,7 +22,7 @@ vout = 0
 N = 30 #Alternar entre 10 y 30
 L = 28 #48, 40 y 28 bits funcionan
 epocas = 100
-
+run_again = False
 r1_final = 0
 r2_final = 0
 aptitud_final = 0
@@ -149,7 +149,7 @@ def mutacion():
             poblacion_hijos[rand_fila][rand_col] = 0
 
 def algotithm():
-    global iteracion, iteraciones, poblacion_inicial, r1_final, r2_final, aptitud_final, epocas
+    global iteracion, iteraciones, poblacion_inicial, r1_final, r2_final, aptitud_final, epocas, run_again
 
     apt_flag = False
 
@@ -173,18 +173,20 @@ def algotithm():
         for ind in range(0,N):
             if aptitud_lst[ind] > 98:
                 if inversion[ind] == 0:
-                    print(F'R1 = {rnum_1[ind]}    R2 = {rnum_2[ind]}    {aptitud_lst[ind]}% de éxito')
+                    print(F'R1 = {rnum_1[ind]}    R2 = {rnum_2[ind]}    {aptitud_lst[ind]}% de exactitud')
                     r1_final = rnum_1[ind]
                     r2_final = rnum_2[ind]
                     aptitud_final = aptitud_lst[ind]
                 elif inversion[ind] == 1:
-                    print(F'R1 = {rnum_2[ind]}    R2 = {rnum_1[ind]} {aptitud_lst[ind]}% de éxito')
+                    print(F'R1 = {rnum_2[ind]}    R2 = {rnum_1[ind]} {aptitud_lst[ind]}% de exactitud')
                     r1_final = rnum_2[ind]
                     r2_final = rnum_1[ind]
                     aptitud_final = aptitud_lst[ind]
                 apt_flag = True
         if apt_flag:
             break
+        else:
+            run_again = True
     end = time.time()
     print(F'{end-start} segundos')
 
@@ -215,8 +217,9 @@ def build_gui():
         [sg.InputText(key='__VOUT__')],
         [sg.Text('', font = ('Trebuchet MS', 15, 'bold'), key = '__R1__')],
         [sg.Text('', font = ('Trebuchet MS', 15, 'bold'), key = '__R2__')],
-        [sg.Text('', font = ('Trebuchet MS', 15, 'bold'), key = '__APT__')],
+        [sg.Text('', font = ('Trebuchet MS', 15, ''), key = '__APT__')],
         [sg.Button('Calcular', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))],
+        [sg.Button('Limpiar', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))],
         [sg.Button('Salir', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))]
     ]
 
@@ -226,15 +229,21 @@ def build_gui():
         event, values = window.read()
         if event == sg.WIN_CLOSED or event == 'Salir':
             break
+        elif event == 'Limpiar':
+            window['__VIN__'].update('')
+            window['__VOUT__'].update('')
+            window['__R1__'].update('')
+            window['__R2__'].update('')
+            window['__APT__'].update('')
         elif event == 'Calcular':
             if values['__VIN__'] != "" or values['__VOUT__'] != "":    
                 try:
-                    vin = int(values['__VIN__'])
-                    vout = int(values['__VOUT__'])
+                    vin = float(values['__VIN__'])
+                    vout = float(values['__VOUT__'])
                     algotithm()
                     r1_string = 'R1 = ' + str(r1_final)
                     r2_string = 'R1 = ' + str(r2_final)
-                    aptitud_string = str(aptitud_final) + '% de exactitud'
+                    aptitud_string = str(round(aptitud_final, 2)) + '% de exactitud'
                     window['__R1__'].update(r1_string)
                     window['__R2__'].update(r2_string)
                     window['__APT__'].update(aptitud_string)
@@ -247,6 +256,11 @@ def build_gui():
                     sg.popup('Algún campo contiene un valor no numérico', title = 'Error')    
             elif values['__VIN__'] == "" or values['__VOUT__'] == "":
                 sg.popup('Algún campo está vacío', title = 'Error')
+
+            if run_again:
+                sg.popup('No se encotnró un resultado satisfactorio\n Por favor vuelve a intentar')
+                window.close()
+
 
     window.close()
 
