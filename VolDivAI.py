@@ -1,3 +1,5 @@
+from contextlib import nullcontext
+from xml.etree.ElementTree import tostring
 import PySimpleGUI as sg
 import math
 import random
@@ -19,6 +21,10 @@ vin = 0
 vout = 0
 N = 30 #Alternar entre 10 y 30
 L = 28 #48, 40 y 28 bits funcionan
+
+r1_final = 0
+r2_final = 0
+aptitud_final = 0
 
 def generador_de_individuos():
     temprow = []
@@ -142,7 +148,7 @@ def mutacion():
             poblacion_hijos[rand_fila][rand_col] = 0
 
 def algotithm():
-    global iteracion, iteraciones
+    global iteracion, iteraciones, r1_final, r2_final, aptitud_final
     start = time.time()
     generador_de_individuos()
     evaluacion_de_aptitud()
@@ -173,20 +179,45 @@ def algotithm():
         if aptitud_lst[ind] > 98:
             if inversion[ind] == 0:
                 print(F'R1 = {rnum_1[ind]}    R2 = {rnum_2[ind]}    {aptitud_lst[ind]}% de éxito')
+                r1_final = rnum_1[ind]
+                r2_final = rnum_2[ind]
+                aptitud_final = aptitud_lst[ind]
             elif inversion[ind] == 1:
                 print(F'R1 = {rnum_2[ind]}    R2 = {rnum_1[ind]} {aptitud_lst[ind]}% de éxito')
+                r1_final = rnum_2[ind]
+                r2_final = rnum_1[ind]
+                aptitud_final = aptitud_lst[ind]
 
-def main():
-    global vin, vout
+def build_gui():
+    global vin, vout, r1_final, r2_final, aptitud_final
 
-    sg.theme('DarkBlue4')
+    sg.LOOK_AND_FEEL_TABLE['CustomTheme'] = {
+        'BACKGROUND': '#f3f3f3',
+        'TEXT': '#04478b',
+        'INPUT': 'white',
+        'TEXT_INPUT': 'black',
+        'SCROLL': 'white',
+        'BUTTON': ('#e5f0ff', '#04478b'),
+        'PROGRESS': ('green', 'white'),
+        'BORDER': 1, 'SLIDER_DEPTH': 0, 
+        'PROGRESS_DEPTH': 0, }
+
+    sg.theme('CustomTheme')
+
+    #Column construction#
+    
 
     layout = [
         [sg.Text('VolDivAI')],
-        [sg.Text('Voltaje de entrada:'), sg.InputText(key='__VIN__')],
-        [sg.Text('Voltaje de salida:'), sg.InputText(key='__VOUT__')],
-        [sg.Button('Calcular')],
-        [sg.Button('Salir')]
+        [sg.Text('Voltaje de entrada', font = ('Trebuchet MS', 12))],
+        [sg.InputText(key='__VIN__')],
+        [sg.Text('Voltaje de salida', font = ('Trebuchet MS', 12))],
+        [sg.InputText(key='__VOUT__')],
+        [sg.Text('', font = ('Trebuchet MS', 15, 'bold'), key = '__R1__')],
+        [sg.Text('', font = ('Trebuchet MS', 15, 'bold'), key = '__R2__')],
+        [sg.Text('', font = ('Trebuchet MS', 15, 'bold'), key = '__APT__')],
+        [sg.Button('Calcular', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))],
+        [sg.Button('Salir', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))]
     ]
 
     window = sg.Window('VolDivAI', layout)
@@ -196,11 +227,32 @@ def main():
         if event == sg.WIN_CLOSED or event == 'Salir':
             break
         elif event == 'Calcular':
-            vin =int(values['__VIN__'])
-            vout = int(values['__VOUT__'])
-            algotithm()
+            if values['__VIN__'] != "" or values['__VOUT__'] != "":    
+                try:
+                    vin = int(values['__VIN__'])
+                    vout = int(values['__VOUT__'])
+                    algotithm()
+                    r1_string = 'R1 = ' + str(r1_final)
+                    r2_string = 'R1 = ' + str(r2_final)
+                    aptitud_string = str(aptitud_final) + '% de exactitud'
+                    window['__R1__'].update(r1_string)
+                    window['__R2__'].update(r2_string)
+                    window['__APT__'].update(aptitud_string)
+                except:
+                    window['__VIN__'].update('')
+                    window['__VOUT__'].update('')
+                    window['__R1__'].update('')
+                    window['__R2__'].update('')
+                    window['__APT__'].update('')
+                    sg.popup('Algún campo contiene un valor no numérico', title = 'Error')    
+            elif values['__VIN__'] == "" or values['__VOUT__'] == "":
+                sg.popup('Algún campo está vacío', title = 'Error')
 
     window.close()
+
+def main():
+    build_gui()
+
 
 if __name__ == '__main__':
     main()
