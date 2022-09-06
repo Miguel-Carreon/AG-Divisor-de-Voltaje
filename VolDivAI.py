@@ -1,4 +1,5 @@
 from contextlib import nullcontext
+from turtle import color
 from xml.etree.ElementTree import tostring
 import PySimpleGUI as sg
 import math
@@ -194,15 +195,15 @@ def build_gui():
     global vin, vout, r1_final, r2_final, aptitud_final
 
     sg.LOOK_AND_FEEL_TABLE['CustomTheme'] = {
-        'BACKGROUND': '#f3f3f3',
-        'TEXT': '#04478b',
-        'INPUT': 'white',
-        'TEXT_INPUT': 'black',
-        'SCROLL': 'white',
-        'BUTTON': ('#e5f0ff', '#04478b'),
-        'PROGRESS': ('green', 'white'),
-        'BORDER': 1, 'SLIDER_DEPTH': 0, 
-        'PROGRESS_DEPTH': 0, }
+        'BACKGROUND': '#1c1B22',
+        'TEXT': '#e2e2e2', # #4550e6', #7f83e7, #7679d3, #6a5be1
+        'INPUT': '#2b2a33',
+        'TEXT_INPUT': '#e2e2e2',
+        'SCROLL': '#2b2a33',
+        'BUTTON': ('#e2e2e2', '#2b2a33'), # #6a5be1
+        'PROGRESS': ('green', '#e2e2e2'), 
+        'BORDER': 0, 'SLIDER_DEPTH': 0, 
+        'PROGRESS_DEPTH': 0 }
 
     sg.theme('CustomTheme')
 
@@ -210,17 +211,17 @@ def build_gui():
     
 
     layout = [
-        [sg.Text('VolDivAI')],
-        [sg.Text('Voltaje de entrada', font = ('Trebuchet MS', 12))],
-        [sg.InputText(key='__VIN__')],
-        [sg.Text('Voltaje de salida', font = ('Trebuchet MS', 12))],
-        [sg.InputText(key='__VOUT__')],
-        [sg.Text('', font = ('Trebuchet MS', 15, 'bold'), key = '__R1__')],
-        [sg.Text('', font = ('Trebuchet MS', 15, 'bold'), key = '__R2__')],
-        [sg.Text('', font = ('Trebuchet MS', 15, ''), key = '__APT__')],
-        [sg.Button('Calcular', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))],
+        [sg.Text('VolDivAI', font = ('Trebuchet MS', 20, 'bold'), text_color = '#6a5be1')],
+        [sg.Text('Voltaje de entrada', font = ('Trebuchet MS', 15))],
+        [sg.InputText(key='__VIN__', font = ('Trebuchet MS', 12))],
+        [sg.Text('Voltaje de salida', font = ('Trebuchet MS', 15))],
+        [sg.InputText(key='__VOUT__', font = ('Trebuchet MS', 12))],
+        [sg.Text('', font = ('Trebuchet MS', 14,  'bold'), text_color = '#6a5be1', key = '__R1__')],
+        [sg.Text('', font = ('Trebuchet MS', 14, 'bold'), text_color = '#6a5be1', key = '__R2__')],
+        [sg.Text('', font = ('Trebuchet MS', 12), text_color = '#6a5be1', key = '__APT__')],
+        [sg.Button('Calcular', size=(10,1), font = ('Trebuchet MS', 12, 'bold'), mouseover_colors = '#6a5be1')], #, button_color = '#6a5be1'
         [sg.Button('Limpiar', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))],
-        [sg.Button('Salir', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))]
+        [sg.Button('Salir', size=(10,1), font = ('Trebuchet MS', 12, 'bold'), mouseover_colors = '#ef5350')]
     ]
 
     window = sg.Window('VolDivAI', layout)
@@ -258,6 +259,11 @@ def build_gui():
                 sg.popup('Algún campo está vacío', title = 'Error')
 
             if run_again:
+                window['__VIN__'].update('')
+                window['__VOUT__'].update('')
+                window['__R1__'].update('')
+                window['__R2__'].update('')
+                window['__APT__'].update('')
                 sg.popup('No se encotnró un resultado satisfactorio\n Por favor vuelve a intentar')
                 window.close()
 
