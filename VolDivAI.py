@@ -213,9 +213,9 @@ def build_gui():
     layout = [
         [sg.Text('VolDivAI', font = ('Trebuchet MS', 20, 'bold'), text_color = '#6a5be1')],
         [sg.Text('Voltaje de entrada', font = ('Trebuchet MS', 15))],
-        [sg.InputText(key='__VIN__', font = ('Trebuchet MS', 12))],
+        [sg.InputText(key='__VIN__', font = ('Trebuchet MS', 14))],
         [sg.Text('Voltaje de salida', font = ('Trebuchet MS', 15))],
-        [sg.InputText(key='__VOUT__', font = ('Trebuchet MS', 12))],
+        [sg.InputText(key='__VOUT__', font = ('Trebuchet MS', 14))],
         [sg.Text('', font = ('Trebuchet MS', 14,  'bold'), text_color = '#6a5be1', key = '__R1__')],
         [sg.Text('', font = ('Trebuchet MS', 14, 'bold'), text_color = '#6a5be1', key = '__R2__')],
         [sg.Text('', font = ('Trebuchet MS', 12), text_color = '#6a5be1', key = '__APT__')],
