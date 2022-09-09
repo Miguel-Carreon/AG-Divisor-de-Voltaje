@@ -211,7 +211,7 @@ def build_gui():
     
 
     layout = [
-        [sg.Text('VolDivAI', font = ('Trebuchet MS', 20, 'bold'), text_color = '#6a5be1')],
+        [sg.Image(filename='header.png')], #[sg.Text('VolDivAI', font = ('Trebuchet MS', 20, 'bold'), text_color = '#6a5be1')],
         [sg.Text('Voltaje de entrada', font = ('Trebuchet MS', 15))],
         [sg.InputText(key='__VIN__', font = ('Trebuchet MS', 14))],
         [sg.Text('Voltaje de salida', font = ('Trebuchet MS', 15))],
