@@ -208,20 +208,22 @@ def build_gui():
     sg.theme('CustomTheme')
 
     #Column construction#
-    
+    calc_col = [[sg.Button('Calcular', size=(17,1), font = ('Trebuchet MS', 15, 'bold'), mouseover_colors = '#6a5be1')]] #, button_color = '#6a5be1'
+    clean_col = [[sg.Button('Limpiar', size=(17,1), font = ('Trebuchet MS', 15, 'bold'))]]
+    exit_col = [[sg.Button('Salir', size=(17,1), font = ('Trebuchet MS', 15, 'bold'), mouseover_colors = '#ef5350')]]
 
     layout = [
         [sg.Image(filename='header.png')], #[sg.Text('VolDivAI', font = ('Trebuchet MS', 20, 'bold'), text_color = '#6a5be1')],
         [sg.Text('Voltaje de entrada', font = ('Trebuchet MS', 15))],
-        [sg.InputText(key='__VIN__', font = ('Trebuchet MS', 14))],
+        [sg.InputText(key='__VIN__', size=(67,1),  font = ('Trebuchet MS', 14))],
         [sg.Text('Voltaje de salida', font = ('Trebuchet MS', 15))],
-        [sg.InputText(key='__VOUT__', font = ('Trebuchet MS', 14))],
+        [sg.InputText(key='__VOUT__', size=(67,1), font = ('Trebuchet MS', 14))],
+        # [[sg.HorizontalSeparator()]],
         [sg.Text('', font = ('Trebuchet MS', 14,  'bold'), text_color = '#6a5be1', key = '__R1__')],
         [sg.Text('', font = ('Trebuchet MS', 14, 'bold'), text_color = '#6a5be1', key = '__R2__')],
         [sg.Text('', font = ('Trebuchet MS', 12), text_color = '#6a5be1', key = '__APT__')],
-        [sg.Button('Calcular', size=(10,1), font = ('Trebuchet MS', 12, 'bold'), mouseover_colors = '#6a5be1')], #, button_color = '#6a5be1'
-        [sg.Button('Limpiar', size=(10,1), font = ('Trebuchet MS', 12, 'bold'))],
-        [sg.Button('Salir', size=(10,1), font = ('Trebuchet MS', 12, 'bold'), mouseover_colors = '#ef5350')]
+        # [[sg.HorizontalSeparator()]],
+        [[sg.Column(calc_col), sg.Column(clean_col), sg.Column(exit_col)]]
     ]
 
     window = sg.Window('VolDivAI', layout)
@@ -236,7 +238,7 @@ def build_gui():
             window['__R1__'].update('')
             window['__R2__'].update('')
             window['__APT__'].update('')
-        elif event == 'Calcular':
+        elif event == 'Calcular':            
             if values['__VIN__'] != "" or values['__VOUT__'] != "":    
                 try:
                     vin = float(values['__VIN__'])
