@@ -226,7 +226,7 @@ def build_gui():
         [[sg.Column(calc_col), sg.Column(clean_col), sg.Column(exit_col)]]
     ]
 
-    window = sg.Window('VolDivAI', layout)
+    window = sg.Window('VolDivAI', icon='icon.ico').Layout(layout)
 
     while True:
         event, values = window.read()
@@ -256,9 +256,9 @@ def build_gui():
                     window['__R1__'].update('')
                     window['__R2__'].update('')
                     window['__APT__'].update('')
-                    sg.popup('Algún campo contiene un valor no numérico', title = 'Error')    
+                    sg.popup('Algún campo contiene un valor no numérico', title = 'Error', icon='icon.ico')    
             elif values['__VIN__'] == "" or values['__VOUT__'] == "":
-                sg.popup('Algún campo está vacío', title = 'Error')
+                sg.popup('Algún campo está vacío', title = 'Error', icon='icon.ico')
 
             if run_again:
                 window['__VIN__'].update('')
@@ -266,7 +266,7 @@ def build_gui():
                 window['__R1__'].update('')
                 window['__R2__'].update('')
                 window['__APT__'].update('')
-                sg.popup('No se encotnró un resultado satisfactorio\n Por favor vuelve a intentar')
+                sg.popup('No se encotnró un resultado satisfactorio\n Por favor vuelve a intentar', icon='icon.ico')
                 window.close()
 
 
