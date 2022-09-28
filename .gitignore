@@ -1,4 +1,6 @@
-AG_Divisor_de_Voltaje.cc
-AG_Divisor_de_Voltaje.exe
 AGDV_GUI.py
 *.png
+README.md
+VolDivAI.exe
+.\graphics\*.png
+
