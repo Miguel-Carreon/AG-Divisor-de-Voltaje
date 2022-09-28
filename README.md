@@ -1,5 +1,7 @@
 # VolDivAI
 
+![icon](https://raw.githubusercontent.com/Miguel-Carreon/AG-Divisor-de-Voltaje/main/graphics/header.svg)
+
 ## VolDIvAI es un programa que utiliza la inteligencia artificial para encontrar los valores de dos resistencias en un divisor de voltaje si solo conoces el voltaje de tu fuente y el voltaje que deseas obtener.
 <br>
 
